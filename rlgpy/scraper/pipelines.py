@@ -3,7 +3,7 @@
 from scrapy.exceptions import DropItem
 from scrapy.spiders import Spider
 
-from rlgpy.items import RlItem
+from scraper.items import RlItem
 
 #Normal for pipeline class... pylint: disable=too-few-public-methods
 class RlItemPipeline:

@@ -18,7 +18,7 @@ from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
-from rlgpy.items import RlItem
+from scraper.items import RlItem
 
 
 class ItemSpider(CrawlSpider):
