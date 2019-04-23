@@ -1,1 +1,2 @@
-rlgpy-spider
+# rlgpy
+Rocket League Garage python package.
