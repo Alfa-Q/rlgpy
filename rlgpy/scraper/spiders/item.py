@@ -33,6 +33,7 @@ class ItemSpider(CrawlSpider):
         custom_settings: ItemSpider specific settings, mapping it to the associated pipeline.
 
     """
+
     name = 'rl-item'
     allowed_domains = ['rocket-league.com']
     start_urls = ['https://rocket-league.com/items']
