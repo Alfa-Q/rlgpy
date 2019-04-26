@@ -3,33 +3,23 @@
 from scrapy.exceptions import DropItem
 from scrapy.spiders import Spider
 
-from rlgpy.items import RlItem
+from rlgpy.scraper.items import RlItem
 
 #Normal for pipeline class... pylint: disable=too-few-public-methods
 class RlItemPipeline:
     """Rocket League item data pipeline."""
 
     def __init__(self):
+        """Initialize pipeline with a set containing unique item ids to avoid duplicates."""
         self.item_ids = set()
 
-
-    #Required argument for function... pylint: disable=unused-argument
+    #spider is required argument for pipeline fn... pylint: disable=unused-argument
     def process_item(self, item: RlItem, spider: Spider) -> RlItem:
-        """Process item, ensuring no duplicate items are exported and setting default field values.
-
-        Args:
-            item: The loaded Rocket League item.
-            spider: The spider which loaded the item.
-
-        Raises:
-            DropItem: The item has already been processed.
-
-        Returns:
-            The rocket league item.
-
-        """
+        """Ensure no duplicate items are exported and set default field values."""
         if item['data_id'] in self.item_ids:
             raise DropItem('Item already added.')
+
+        self.item_ids.add(item['data_id'])
 
         for field in item.fields:
             item.setdefault(field, None)

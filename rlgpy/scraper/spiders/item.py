@@ -18,7 +18,7 @@ from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
-from rlgpy.items import RlItem
+from rlgpy.scraper.items import RlItem
 
 
 class ItemSpider(CrawlSpider):
@@ -33,7 +33,8 @@ class ItemSpider(CrawlSpider):
         custom_settings: ItemSpider specific settings, mapping it to the associated pipeline.
 
     """
-    name = 'rl-items'
+
+    name = 'rl-item'
     allowed_domains = ['rocket-league.com']
     start_urls = ['https://rocket-league.com/items']
     rules = (
@@ -43,7 +44,7 @@ class ItemSpider(CrawlSpider):
         ),
     )
     custom_settings = {
-        'ITEM_PIPELINES': {'rlgpy.pipelines.RlItemPipeline': 300}
+        'ITEM_PIPELINES': {'rlgpy.scraper.pipelines.RlItemPipeline': 300}
     }
 
     def parse_item(self, response: Response) -> RlItem:
