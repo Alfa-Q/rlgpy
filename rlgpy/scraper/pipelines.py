@@ -12,24 +12,14 @@ class RlItemPipeline:
     def __init__(self):
         self.item_ids = set()
 
-
-    #Required argument for function... pylint: disable=unused-argument
+    #spider is required argument for pipeline fn... pylint: disable=unused-argument
     def process_item(self, item: RlItem, spider: Spider) -> RlItem:
-        """Process item, ensuring no duplicate items are exported and setting default field values.
+        """Ensure no duplicate items are exported and set default field values."""
 
-        Args:
-            item: The loaded Rocket League item.
-            spider: The spider which loaded the item.
-
-        Raises:
-            DropItem: The item has already been processed.
-
-        Returns:
-            The rocket league item.
-
-        """
         if item['data_id'] in self.item_ids:
             raise DropItem('Item already added.')
+
+        self.item_ids.add(item['data_id'])
 
         for field in item.fields:
             item.setdefault(field, None)

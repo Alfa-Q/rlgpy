@@ -43,7 +43,7 @@ class ItemSpider(CrawlSpider):
         ),
     )
     custom_settings = {
-        'ITEM_PIPELINES': {'rlgpy.pipelines.RlItemPipeline': 300}
+        'ITEM_PIPELINES': {'rlgpy.scraper.pipelines.RlItemPipeline': 300}
     }
 
     def parse_item(self, response: Response) -> RlItem:
