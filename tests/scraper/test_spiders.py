@@ -3,11 +3,13 @@
 import os
 import json
 import logging
+from multiprocessing import Process
 from typing import List, Any, Dict
 
 import pytest
+from twisted.internet import reactor
 from scrapy.spiders import CrawlSpider
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
 
 from rlgpy.scraper.spiders import ItemSpider
 
@@ -15,29 +17,44 @@ from rlgpy.scraper.spiders import ItemSpider
 logging.getLogger('scrapy').propagate = False
 
 
+def run_spider(spider: CrawlSpider, settings: Dict[str, Any]):
+    """Run spider safely.
+
+    Prevents reactor from exploding when multiple spiders are running at once.  This function
+    should be called in a separate process from other running spiders.
+
+    Args:
+        spider: The crawl spider to run.
+        settings: The settings to run the spider with.
+
+    """
+    runner = CrawlerRunner(settings)
+    deferred = runner.crawl(spider)
+    deferred.addBoth(lambda _: reactor.stop())
+    reactor.run()
+
+
 @pytest.fixture(scope='function')
 def scraped_file(request):
     """Represents a scraped file after the spider has been run."""
 
-    def create_file(spider: CrawlSpider, filename: str) -> str:
+    def create_file(spider: CrawlSpider, settings: Dict[str, Any]) -> str:
         """Setup function which runs the spider specified.
 
         Workaround for pytest which doesn't allow arguments for fixture-wrapped functions.
 
         Args:
-            spider: The spider to run.
-            filename: The file to save the data scraped by the spider.
+            spider: The crawl spider to run.
+            settings: The settings to run the spider with.
 
         Returns:
             The name of the file.
 
         """
-        process = CrawlerProcess({
-            'FEED_URI': filename,
-            'FEED_FORMAT': 'jsonlines'
-        })
-        process.crawl(spider)
+        filename = settings['FEED_URI']
+        process = Process(target=run_spider, args=(spider, settings,))
         process.start()
+        process.join()
 
         def teardown():
             """Remove the scraped file."""
@@ -73,6 +90,12 @@ def read_jsonlines_file(filepath: str) -> List[Dict[str, Any]]:
 # Pytest magic... pylint: disable=redefined-outer-name
 def test_item_spider(scraped_file):
     """Testing that the item spider works correctly."""
-    filename = scraped_file(spider=ItemSpider, filename='items.jl')
+    filename = scraped_file(
+        spider=ItemSpider,
+        settings={
+            'FEED_URI': 'items.jl',
+            'FEED_FORMAT': 'jsonlines'
+        }
+    )
     data = read_jsonlines_file(filename)
     assert len(data) > 0, 'No data retrieved.'
