@@ -3,7 +3,8 @@
 from scrapy.exceptions import DropItem
 from scrapy.spiders import Spider
 
-from rlgpy.scraper.items import RlItem
+from rlgpy.scraper.items import RlItem, RlTrade
+
 
 #Normal for pipeline class... pylint: disable=too-few-public-methods
 class RlItemPipeline:
@@ -24,4 +25,23 @@ class RlItemPipeline:
         for field in item.fields:
             item.setdefault(field, None)
 
+        return item
+
+
+class RlTradePipeline:
+    """Rocket League trade pipeline."""
+
+    #spider is required argument for pipeline fn... pylint: disable=unused-argument
+    def process_item(self, item: RlTrade, spider: Spider) -> RlTrade:
+        """Set the default values for tradeable items without certifications.
+
+        By default, tradeable items without a certification or paint or count will not have the
+        keys 'certification' 'paint' or 'count'.  To normalize the data, the keys are added with
+        a default value.
+
+        """
+        for tradeable_item in item['have'] + item['want']:
+            tradeable_item.setdefault('count', 1)
+            tradeable_item.setdefault('certification', '')
+            tradeable_item.setdefault('paint', '')
         return item
