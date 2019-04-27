@@ -6,7 +6,7 @@ from scrapy.spiders import Spider
 from rlgpy.scraper.items import RlItem, RlTrade
 
 
-#Normal for pipeline class... pylint: disable=too-few-public-methods
+# Normal for pipeline class... pylint: disable=too-few-public-methods
 class RlItemPipeline:
     """Rocket League item data pipeline."""
 
@@ -23,7 +23,7 @@ class RlItemPipeline:
         self.item_ids.add(item['data_id'])
 
         for field in item.fields:
-            item.setdefault(field, None)
+            item.setdefault(field, '')
 
         return item
 
