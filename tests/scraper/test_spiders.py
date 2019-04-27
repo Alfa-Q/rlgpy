@@ -11,6 +11,9 @@ from scrapy.crawler import CrawlerProcess
 from rlgpy.scraper.spiders import ItemSpider, TradeSpider
 
 
+logging.getLogger('scrapy').propagate = False
+
+
 @pytest.fixture(scope='function')
 def scraped_file(request):
     """Represents a scraped file after the spider has been run."""
@@ -29,7 +32,6 @@ def scraped_file(request):
 
         """
         process = CrawlerProcess({
-            'LOG_ENABLED': False,
             'FEED_URI': filename,
             'FEED_FORMAT': 'jsonlines'
         })
