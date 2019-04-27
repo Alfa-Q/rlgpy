@@ -11,7 +11,7 @@ from twisted.internet import reactor
 from scrapy.spiders import CrawlSpider
 from scrapy.crawler import CrawlerRunner
 
-from rlgpy.scraper.spiders import ItemSpider
+from rlgpy.scraper.spiders import ItemSpider, TradeSpider
 
 
 logging.getLogger('scrapy').propagate = False
@@ -94,6 +94,20 @@ def test_item_spider(scraped_file):
         spider=ItemSpider,
         settings={
             'FEED_URI': 'items.jl',
+            'FEED_FORMAT': 'jsonlines'
+        }
+    )
+    data = read_jsonlines_file(filename)
+    assert len(data) > 0, 'No data retrieved.'
+
+
+# Pytest magic... pylint: disable=redefined-outer-name
+def test_trade_spider(scraped_file):
+    """Testing that the trade spider works correctly."""
+    filename = scraped_file(
+        spider=TradeSpider,
+        settings={
+            'FEED_URI': 'trades.jl',
             'FEED_FORMAT': 'jsonlines'
         }
     )
