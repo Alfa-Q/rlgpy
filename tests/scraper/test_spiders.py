@@ -2,6 +2,7 @@
 
 import os
 import json
+import logging
 from typing import List, Any, Dict
 
 import pytest
@@ -63,6 +64,7 @@ def read_jsonlines_file(filepath: str) -> List[Dict[str, Any]]:
         A list of JSON data.
 
     """
+    data = list()
     with open(filepath, 'r') as jsonlines_file:
         data = [json.loads(line) for line in jsonlines_file.readlines()]
     return data
@@ -73,4 +75,4 @@ def test_item_spider(scraped_file):
     """Testing that the item spider works correctly."""
     filename = scraped_file(spider=ItemSpider, filename='items.jl')
     data = read_jsonlines_file(filename)
-    assert not data, 'No data retrieved.'
+    assert len(data) > 0, 'No data retrieved.'
