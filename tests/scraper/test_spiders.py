@@ -9,7 +9,7 @@ import pytest
 from scrapy.spiders import CrawlSpider
 from scrapy.crawler import CrawlerProcess
 
-from rlgpy.scraper.spiders import ItemSpider, TradeSpider
+from rlgpy.scraper.spiders import ItemSpider
 
 
 logging.getLogger('scrapy').propagate = False

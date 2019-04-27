@@ -46,6 +46,7 @@ class ItemSpider(CrawlSpider):
         'ITEM_PIPELINES': {'rlgpy.scraper.pipelines.RlItemPipeline': 300}
     }
 
+
     def parse_items(self, response: Response) -> RlItem:
         """Parse items from the item category pages.
 

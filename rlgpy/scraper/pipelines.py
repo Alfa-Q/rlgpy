@@ -14,7 +14,7 @@ class RlItemPipeline:
         """Initialize pipeline with a set containing unique item ids to avoid duplicates."""
         self.item_ids = set()
 
-    #spider is required argument for pipeline fn... pylint: disable=unused-argument
+    # Required argument for pipeline fn... pylint: disable=unused-argument
     def process_item(self, item: RlItem, spider: Spider) -> RlItem:
         """Ensure no duplicate items are exported and set default field values."""
         if item['data_id'] in self.item_ids:
@@ -31,7 +31,7 @@ class RlItemPipeline:
 class RlTradePipeline:
     """Rocket League trade pipeline."""
 
-    #spider is required argument for pipeline fn... pylint: disable=unused-argument
+    # Required argument for pipeline fn... pylint: disable=unused-argument,no-self-use
     def process_item(self, item: RlTrade, spider: Spider) -> RlTrade:
         """Set the default values for tradeable items without certifications.
 
