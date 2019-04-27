@@ -14,11 +14,10 @@ Example:
 """
 
 from scrapy.http import Response
-from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 
-from rlgpy.scraper.items import RlItem
+from rlgpy.scraper.items import RlItemLoader, RlItem
 
 
 class ItemSpider(CrawlSpider):
@@ -40,14 +39,14 @@ class ItemSpider(CrawlSpider):
     rules = (
         Rule(
             link_extractor=LinkExtractor(allow=(r'/items/*',)),
-            callback='parse_item'
+            callback='parse_items'
         ),
     )
     custom_settings = {
         'ITEM_PIPELINES': {'rlgpy.scraper.pipelines.RlItemPipeline': 300}
     }
 
-    def parse_item(self, response: Response) -> RlItem:
+    def parse_items(self, response: Response) -> RlItem:
         """Parse items from the item category pages.
 
         Args:
@@ -61,7 +60,7 @@ class ItemSpider(CrawlSpider):
 
         # Iterate through each rocket league item and build it.
         for elem_item in response.xpath('//div[starts-with(@class, "item-omg-wtf-bbq")]'):
-            loader = ItemLoader(item=RlItem(), selector=elem_item)
+            loader = RlItemLoader(item=RlItem(), selector=elem_item)
             loader.add_xpath('data_id', './/div/@data-id')
             loader.add_xpath('img_url', './/img/@src')
             loader.add_value('name', elem_item.attrib['data-name'])

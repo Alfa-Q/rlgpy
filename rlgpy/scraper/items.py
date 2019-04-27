@@ -18,14 +18,21 @@ class RlItem(scrapy.Item):
         dlcpack (str): The DLC pack the item is from, if applicable.
 
     """
-    data_id = scrapy.Field(output_processor=TakeFirst(), serializer=int)
-    img_url = scrapy.Field(output_processor=TakeFirst())
-    name = scrapy.Field(output_processor=TakeFirst())
-    category = scrapy.Field(output_processor=TakeFirst())
-    platform = scrapy.Field(output_processor=TakeFirst())
-    rarity = scrapy.Field(output_processor=TakeFirst())
-    dlcpack = scrapy.Field(output_processor=TakeFirst())
 
+    data_id = scrapy.Field()
+    img_url = scrapy.Field()
+    name = scrapy.Field()
+    category = scrapy.Field()
+    platform = scrapy.Field()
+    rarity = scrapy.Field()
+    dlcpack = scrapy.Field()
+
+
+class RlItemLoader(ItemLoader):
+    """Item loader for RlItem."""
+
+    default_output_processor = TakeFirst()
+    data_id_out = Compose(lambda v: v[0], int)
 
 
 class RlTradeableItem(scrapy.Item):
