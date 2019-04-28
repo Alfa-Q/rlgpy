@@ -64,7 +64,8 @@ class TradeSpider(CrawlSpider):
         'ITEM_PIPELINES': {'rlgpy.scraper.pipelines.RlTradePipeline': 300}
     }
 
-    def parse_items(self, selector: Selector) -> List[RlTradeableItem]:
+    @staticmethod
+    def parse_items(selector: Selector) -> List[RlTradeableItem]:
         """Parse the trade items from the provided selector.
 
         Extracts each trade item from the provided selector and and loads them into a list to be
@@ -108,6 +109,6 @@ class TradeSpider(CrawlSpider):
             loader.add_css('url', 'div:first-child a::attr(href)')
             loader.add_css('platform', 'div.rlg-trade-platform-name span::text', re=r'([^\s:]+)')
             loader.add_css('rlg_username', 'div.rlg-trade__avatar img::attr(alt)')
-            loader.add_value('have', self.parse_items(trade.css('div#rlg-youritems a')))
-            loader.add_value('want', self.parse_items(trade.css('div#rlg-theiritems a')))
+            loader.add_value('have', TradeSpider.parse_items(trade.css('div#rlg-youritems a')))
+            loader.add_value('want', TradeSpider.parse_items(trade.css('div#rlg-theiritems a')))
             yield loader.load_item()
