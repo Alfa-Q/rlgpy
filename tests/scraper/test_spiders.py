@@ -11,7 +11,11 @@ from twisted.internet import reactor
 from scrapy.spiders import CrawlSpider
 from scrapy.crawler import CrawlerRunner
 
-from rlgpy.scraper.spiders import ItemSpider, TradeSpider
+from rlgpy.scraper.spiders import (
+    ItemSpider,
+    TradeSpider,
+    AchievementSpider
+)
 
 
 logging.getLogger('scrapy').propagate = False
@@ -108,6 +112,20 @@ def test_trade_spider(scraped_file):
         spider=TradeSpider,
         settings={
             'FEED_URI': 'trades.jl',
+            'FEED_FORMAT': 'jsonlines'
+        }
+    )
+    data = read_jsonlines_file(filename)
+    assert len(data) > 0, 'No data retrieved.'
+
+
+# Using pytest fixture... pylint: disable=redefined-outer-name
+def test_achievement_spider(scraped_file):
+    """Testing that the achievement spider works correctly."""
+    filename = scraped_file(
+        spider=AchievementSpider,
+        settings={
+            'FEED_URI': 'achievements.jl',
             'FEED_FORMAT': 'jsonlines'
         }
     )

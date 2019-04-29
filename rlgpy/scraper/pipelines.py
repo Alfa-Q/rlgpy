@@ -3,7 +3,11 @@
 from scrapy.exceptions import DropItem
 from scrapy.spiders import Spider
 
-from rlgpy.scraper.items import RlItem, RlTrade
+from rlgpy.scraper.items import (
+    RlItem,
+    RlTrade,
+    RlAchievement
+)
 
 
 # Normal for pipeline class... pylint: disable=too-few-public-methods
@@ -44,4 +48,14 @@ class RlTradePipeline:
             tradeable_item.setdefault('count', 1)
             tradeable_item.setdefault('certification', '')
             tradeable_item.setdefault('paint', '')
+        return item
+
+
+class RlAchievementPipeline:
+    """Rocket League achievement pipeline."""
+
+    # Required argument for pipeline fn... pylint: disable=unused-argument,no-self-use
+    def process_item(self, item: RlAchievement, spider: Spider) -> RlAchievement:
+        """Set default values for achievement items without gamerscore fields."""
+        item.setdefault('gamerscore', 0)
         return item
