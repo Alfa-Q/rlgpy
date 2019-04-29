@@ -1,4 +1,8 @@
-"""Project item definitions."""
+"""Project item definitions.
+
+#TODO: Change relative URL to absolute URL of image resources.
+
+"""
 
 import scrapy
 from scrapy.loader import ItemLoader
@@ -90,3 +94,30 @@ class RlTradeLoader(ItemLoader):
     platform_out = Compose(lambda x: x[0], str.upper)
     have_out = Identity()
     want_out = Identity()
+
+
+class RlAchievement(scrapy.Item):
+    """Rocket League Achievement representation.
+
+    Attributes:
+        name (str): Achievement name.
+        img_url (str): Relative URL of the achievement image.
+        gamerscore (int): The achievement's gamerscore on XBOX platform.
+        trophy_type (str): The trophy on the PSN platform.
+        description (str): Achievement description.
+
+    """
+
+    name = scrapy.Field()
+    img_url = scrapy.Field()
+    gamerscore = scrapy.Field()
+    trophy_type = scrapy.Field()
+    description = scrapy.Field()
+
+
+class RlAchievementLoader(ItemLoader):
+    """Achievement loader for a RlAchievement."""
+
+    default_output_processor = TakeFirst()
+    gamerscore_out = Compose(lambda v: v[0], int)
+    trophy_type_out = Compose(lambda v: v[0], str.upper)
