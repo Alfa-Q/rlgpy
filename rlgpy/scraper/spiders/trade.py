@@ -59,8 +59,7 @@ class TradeSpider(CrawlSpider):
     )
     custom_settings = {
         'CONCURRENT_REQUESTS': 5,
-        'CLOSESPIDER_ITEMCOUNT': 10000,
-        'CLOSESPIDER_PAGECOUNT': 2,
+        'CLOSESPIDER_ITEMCOUNT': 500,
         'ITEM_PIPELINES': {'rlgpy.scraper.pipelines.RlTradePipeline': 300}
     }
 
@@ -78,7 +77,6 @@ class TradeSpider(CrawlSpider):
         Returns: A list of tradeable items.
 
         """
-
         items = list()
         for item in selector:
             loader = RlTradeableItemLoader(item=RlTradeableItem(), selector=item)
@@ -100,7 +98,6 @@ class TradeSpider(CrawlSpider):
             A loaded trade item.
 
         """
-
         self.logger.info('Crawler Found Trade Page: %s', response.url)
 
         for trade in response.css('div.is--user'):

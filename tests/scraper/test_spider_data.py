@@ -12,7 +12,7 @@ import logging
 
 import pytest
 
-from tests.scraper.fixtures import scraped_data
+from tests.scraper.fixtures import scraped_data  # pylint: disable=unused-import
 from tests.config import Config
 
 
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
     indirect=True
 )
 def test_spider_data_not_null(scraped_data):
-    """Testing that the spiders are working correctly."""
+    """Test the spiders are functioning."""
     logger.debug('Scraped data id: {}'.format(id(scraped_data)))
     logger.debug('Scraped data type: {}'.format(type(scraped_data)))
     assert scraped_data != None, 'File data was null!\nExpected type: List[Dict[str, Any]]'
@@ -39,6 +39,7 @@ def test_spider_data_not_null(scraped_data):
     indirect=True
 )
 def test_spider_data_not_empty(scraped_data):
+    """Test the spider retrieves at least one data item."""
     logger.debug('Scraped data id: {}'.format(id(scraped_data)))
     logger.debug('Scraped data type: {}'.format(type(scraped_data)))
     assert len(scraped_data) > 0, "No data was retrieved!"

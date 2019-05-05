@@ -4,7 +4,7 @@ import logging
 import json
 from pathlib import Path
 from typing import List, Dict, Any
-from multiprocess import Process
+from multiprocessing import Process
 
 from twisted.internet import reactor
 from scrapy.spiders import Spider
