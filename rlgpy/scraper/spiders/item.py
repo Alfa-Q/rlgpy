@@ -60,7 +60,7 @@ class ItemSpider(CrawlSpider):
         self.logger.info('Crawler Found Item Page: %s', response.url)
 
         # Iterate through each rocket league item and build it.
-        for elem_item in response.xpath('//div[starts-with(@class, "item-omg-wtf-bbq")]'):
+        for elem_item in response.xpath('//div[starts-with(@class, "rlg-item__container")]'):
             loader = RlItemLoader(item=RlItem(), selector=elem_item)
             loader.add_xpath('data_id', './/div/@data-id')
             loader.add_xpath('img_url', './/img/@src')
